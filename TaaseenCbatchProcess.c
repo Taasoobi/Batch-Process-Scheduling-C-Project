@@ -9,7 +9,14 @@ struct batchItem{
     int id;
     int arrival;
     int total;
-};
+    int remaining;
+    int done;
+    int start;
+    int already_started;
+    int end;
+    int turnaround;
+}; //}*table = NULL;
+//typedef struct node table_type;
 typedef struct batchItem batch;
 
 batch *bacharr;
@@ -51,6 +58,8 @@ void params(){
 void fifo(){
 
     printf("\n FIFO: ");
+    //First in First out
+    /**/
 
     printf("\n");
     printf("\n ID   Arrival   Total   Start   End   Turnaround");
@@ -64,9 +73,19 @@ void fifo(){
 
 }
 
-void sjf(){}
+void sjf(){
+    //SJF = shortest job first (Not preemptive)
+    /*
+    
+    */
+}
 
-void srt(){}
+void srt(){
+    //Shortest Remaining Time (Is Preemptive)
+    /*
+    
+    */
+}
 
 int main(){
     int inp;
@@ -102,5 +121,6 @@ int main(){
     
     }
 
+    free(bacharr);
     return 0;
 }
