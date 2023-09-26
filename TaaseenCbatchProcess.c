@@ -4,20 +4,22 @@
 #include <limits.h>
 
 //Global Variables
+int size;
 struct batchItem{
     int id;
     int arrival;
     int total;
 };
-typedef struct batchItem bach;
+typedef struct batchItem batch;
 
+batch *bacharr;
 
 void params(){
-    int size;
+    //int size;
     printf("\n Enter total number of processes: ");
     scanf("%d", &size);
 
-    bach *bacharr = (bach*)malloc(sizeof(bach)*size);
+    bacharr = (batch*)malloc(sizeof(batch)*size);
 
     int idin;
     int arrin;
@@ -46,6 +48,26 @@ void params(){
     printf("\n\n");
 }
 
+void fifo(){
+
+    printf("\n FIFO: ");
+
+    printf("\n");
+    printf("\n ID   Arrival   Total   Start   End   Turnaround");
+    printf("\n ------------------------------------------------");
+
+    for (int i = 0; i < size; i++)
+    {
+        printf("\n %d       %d        %d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total);
+    }
+    printf("\n\n");
+
+}
+
+void sjf(){}
+
+void srt(){}
+
 int main(){
     int inp;
     bool menu = true;
@@ -66,7 +88,7 @@ int main(){
         {
             params();//Test Input: 1 3 1 0 6 2 1 3 3 3 2
         } else if (inp == 2){
-            //func 2
+            fifo();//func 2
         } else if (inp == 3){
             //func 3
         } else if (inp == 4){
