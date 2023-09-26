@@ -20,6 +20,9 @@ struct batchItem{
 typedef struct batchItem batch;
 
 batch *bacharr;
+batch *fifoarr;
+batch *sjfarr;
+batch *srtarr;
 
 void params(){
     //int size;
@@ -59,7 +62,20 @@ void fifo(){
 
     printf("\n FIFO: ");
     //First in First out
+    fifoarr[0].start = bacharr[0].arrival;
+    fifoarr[0].end = bacharr[0].total;
+    fifoarr[0].turnaround = fifoarr[0].end - bacharr[0].arrival;
+    int newStart = fifoarr[0].end;
     /**/
+    for (int i = 1; i < size; i++)
+    {
+        fifoarr[i].start = newStart;
+        fifoarr[i].end = fifoarr[i].start + bacharr[i].total;
+        newStart = fifoarr[i].end;//for next iteration
+        fifoarr[i].turnaround = fifoarr[i].end - bacharr[i].arrival;
+    }
+    
+
 
     printf("\n");
     printf("\n ID   Arrival   Total   Start   End   Turnaround");
@@ -67,8 +83,8 @@ void fifo(){
 
     for (int i = 0; i < size; i++)
     {
-        printf("\n %d       %d        %d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total);
-    }
+        printf("\n %d       %d        %d        %d      %d      %d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total);
+    }//            id     arrival    total     start    end    turna
     printf("\n\n");
 
 }
