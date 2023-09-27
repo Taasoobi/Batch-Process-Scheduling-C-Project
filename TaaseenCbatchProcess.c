@@ -59,14 +59,14 @@ void params(){
 }
 
 void fifo(){
-
+    fifoarr = (batch*)malloc(sizeof(batch)*size);
     printf("\n FIFO: ");
     //First in First out
     fifoarr[0].start = bacharr[0].arrival;
     fifoarr[0].end = bacharr[0].total;
     fifoarr[0].turnaround = fifoarr[0].end - bacharr[0].arrival;
     int newStart = fifoarr[0].end;
-    /**/
+    
     for (int i = 1; i < size; i++)
     {
         fifoarr[i].start = newStart;
@@ -75,16 +75,14 @@ void fifo(){
         fifoarr[i].turnaround = fifoarr[i].end - bacharr[i].arrival;
     }
     
-
-
     printf("\n");
-    printf("\n ID   Arrival   Total   Start   End   Turnaround");
+    printf("\n ID   Arrival  Total   Start   End     Turnaround");
     printf("\n ------------------------------------------------");
 
     for (int i = 0; i < size; i++)
     {
-        printf("\n %d       %d        %d        %d      %d      %d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total);
-    }//            id     arrival    total     start    end    turna
+        printf("\n %2d    %2d       %2d     %2d      %2d      %2d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total, fifoarr[i].start, fifoarr[i].end, fifoarr[i].turnaround);
+    }//            id     arrival   total   start   end    turna
     printf("\n\n");
 
 }
