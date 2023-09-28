@@ -88,17 +88,34 @@ void fifo(){
 }
 
 void sjf(){
+    sjfarr = (batch*)malloc(sizeof(batch)*size);
     //SJF = shortest job first (Not preemptive)
-    /*
-    
-    */
+    /*    */
+
+        printf("\n");
+    printf("\n ID   Arrival  Total   Start   End     Turnaround");
+    printf("\n ------------------------------------------------");
+
+    for (int i = 0; i < size; i++)
+    {
+        printf("\n %2d    %2d       %2d     %2d      %2d      %2d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total, &fifoarr[i].start, &fifoarr[i].end, &fifoarr[i].turnaround);
+    }//            id     arrival   total   start   end    turna
+    printf("\n\n");
 }
 
 void srt(){
+    srtarr = (batch*)malloc(sizeof(batch)*size);
     //Shortest Remaining Time (Is Preemptive)
-    /*
-    
-    */
+    /*    */
+        printf("\n");
+    printf("\n ID   Arrival  Total   Start   End     Turnaround");
+    printf("\n ------------------------------------------------");
+
+    for (int i = 0; i < size; i++)
+    {
+        printf("\n %2d    %2d       %2d     %2d      %2d      %2d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total, &fifoarr[i].start, &fifoarr[i].end, &fifoarr[i].turnaround);
+    }//            id     arrival   total   start   end    turna
+    printf("\n\n");
 }
 
 int main(){
