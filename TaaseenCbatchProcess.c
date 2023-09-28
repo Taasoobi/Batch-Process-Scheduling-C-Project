@@ -89,8 +89,34 @@ void fifo(){
 
 void sjf(){
     sjfarr = (batch*)malloc(sizeof(batch)*size);
+    //private checking array
+    batch *check = (batch*)malloc(sizeof(batch)*size);
     //SJF = shortest job first (Not preemptive)
     /*    */
+
+    sjfarr[0].start = bacharr[0].arrival;
+    sjfarr[0].end = bacharr[0].total;
+    sjfarr[0].turnaround = sjfarr[0].end - bacharr[0].arrival;
+
+    int shortest;//shortest total (total cycles)
+    shortest = bacharr[1].total;
+    int temp;
+    for (int i = 1; i < size; i++)
+    {
+        for (int j = 1; j < size; j++)
+        {
+            if (shortest >= bacharr[j].total)
+            {
+                shortest = bacharr[j].total;
+            }
+            //check[i].total = shortest;
+        }
+        check[i].total = shortest;
+        temp = shortest;
+    }
+       
+
+
 
         printf("\n");
     printf("\n ID   Arrival  Total   Start   End     Turnaround");
