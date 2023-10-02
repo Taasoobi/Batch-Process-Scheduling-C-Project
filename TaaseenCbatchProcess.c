@@ -103,7 +103,7 @@ void sjf(){
     int temp;
     for (int i = 1; i < size; i++)
     {
-        for (int j = 1; j < size; j++)
+        for (int j = i; j < size; j++)
         {
             if (shortest >= bacharr[j].total)
             {
