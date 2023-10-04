@@ -90,7 +90,7 @@ void fifo(){
 void sjf(){
     sjfarr = (batch*)malloc(sizeof(batch)*size);
     //private checking array
-    batch *check = (batch*)malloc(sizeof(batch)*size);
+    batch *shorti = (batch*)malloc(sizeof(batch)*size);
     //SJF = shortest job first (Not preemptive)
     /*    */
 
@@ -100,21 +100,32 @@ void sjf(){
 
     int shortest;//shortest total (total cycles)
     shortest = bacharr[1].total;
+    shorti[0].total = bacharr[0].total;//was shorti[0].total = shortest; 
     int temp;
     for (int i = 1; i < size; i++)
     {
         for (int j = i; j < size; j++)
         {
-            if (shortest >= bacharr[j].total)
+            if (shortest <= bacharr[j].total)
             {
                 shortest = bacharr[j].total;
+                shorti[i].total = shortest;
+            } else {
+                shorti[j].total = bacharr[j].total;
             }
             //check[i].total = shortest;
         }
-        check[i].total = shortest;
+        //shorti[i].total = shortest;
         temp = shortest;
     }
-       
+
+    printf("\n");
+    printf("\n Shortest Array");
+    for (int i = 0; i < size; i++)
+    {
+        printf("\n %2d", shorti[i].total);
+    }
+    
 
 
 
@@ -124,7 +135,7 @@ void sjf(){
 
     for (int i = 0; i < size; i++)
     {
-        printf("\n %2d    %2d       %2d     %2d      %2d      %2d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total, &fifoarr[i].start, &fifoarr[i].end, &fifoarr[i].turnaround);
+        printf("\n %2d    %2d       %2d     %2d      %2d      %2d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total, sjfarr[i].start, sjfarr[i].end, sjfarr[i].turnaround);
     }//            id     arrival   total   start   end    turna
     printf("\n\n");
 }
@@ -166,7 +177,7 @@ int main(){
         } else if (inp == 2){
             fifo();//func 2
         } else if (inp == 3){
-            //func 3
+            sjf();//func 3
         } else if (inp == 4){
             //func 4
         } else if (inp == 5){
