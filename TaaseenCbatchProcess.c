@@ -23,6 +23,7 @@ batch *bacharr;
 batch *fifoarr;
 batch *sjfarr;
 batch *srtarr;
+batch *shorti;
 
 void params(){
     //int size;
@@ -87,10 +88,38 @@ void fifo(){
 
 }
 
+void bubbleSort()
+{
+    int i, j;
+    bool swapped;
+    for (i = 0; i < size - 1; i++) {
+        swapped = false;
+        for (j = 0; j < size - i - 1; j++) {
+            if (shorti[j].total > shorti[j + 1].total) {
+                swap(&shorti[j].total, &shorti[j + 1].total);
+                swapped = true;
+            }
+        }
+ 
+        // If no two elements were swapped by inner loop,
+        // then break
+        if (swapped == false)
+            break;
+    }
+}
+
+void swap(int* xp, int* yp)
+{
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
 void sjf(){
     sjfarr = (batch*)malloc(sizeof(batch)*size);
     //private checking array
-    batch *shorti = (batch*)malloc(sizeof(batch)*size);
+    shorti = (batch*)malloc(sizeof(batch)*size);
+    batch *sorted = (batch*)malloc(sizeof(batch)*size);
     //SJF = shortest job first (Not preemptive)
     /*    */
 
@@ -102,14 +131,25 @@ void sjf(){
     shortest = bacharr[1].total;
     shorti[0].total = bacharr[0].total;//was shorti[0].total = shortest; 
     int temp;
+    
+    for (int i = 1; i < size; i++)
+    {
+        shorti[i].total = bacharr[i].total;
+    }
+    
+    bubbleSort();
+    /*
     for (int i = 1; i < size; i++)
     {
         for (int j = i; j < size; j++)
         {
-            if (shortest <= bacharr[j].total)
+            if (shortest > bacharr[j+1].total)
             {
-                shortest = bacharr[j].total;
+                shortest = bacharr[j+1].total;
+                temp = bacharr[j].total;
                 shorti[i].total = shortest;
+                shorti[i+1].total = temp;
+                
             } else {
                 shorti[j].total = bacharr[j].total;
             }
@@ -117,7 +157,7 @@ void sjf(){
         }
         //shorti[i].total = shortest;
         temp = shortest;
-    }
+    }*/
 
     printf("\n");
     printf("\n Shortest Array");
@@ -173,7 +213,7 @@ int main(){
 
         if (inp == 1)
         {
-            params();//Test Input: 1 3 1 0 6 2 1 3 3 3 2
+            params();//Test Input: 1 3 1 0 6 2 1 3 3 3 2 3
         } else if (inp == 2){
             fifo();//func 2
         } else if (inp == 3){
