@@ -88,32 +88,9 @@ void fifo(){
 
 }
 
-void bubbleSort()
-{
-    int i, j;
-    bool swapped;
-    int nSize;
-    nSize = size-1;
-    for (i = 1; i < nSize - 1; i++) { //changed i = 0 -> i=1,
-        swapped = false;
-        for (j = 1; j < nSize - i - 1; j++) {
-            if (shorti[j].total > shorti[j + 1].total) {
-                swap(&shorti[j].total, &shorti[j + 1].total);
-                swapped = true;
-            }
-        }
- 
-        // If no two elements were swapped by inner loop,
-        // then break
-        if (swapped == false)
-            break;
-    }
-}
-
 void selectionSort() 
 { 
     int i, j, min_idx; 
-    int nSize = size-1;
 
     // One by one move boundary of 
     // unsorted subarray 
@@ -131,11 +108,11 @@ void selectionSort()
     } 
 }
 
-void swap(int* xp, int* yp)
+void swap(int* x, int* y)
 {
-    int temp = *xp;
-    *xp = *yp;
-    *yp = temp;
+    int temp = *x;
+    *x = *y;
+    *y = temp;
 }
 
 void sjf(){
@@ -159,29 +136,8 @@ void sjf(){
     {
         shorti[i].total = bacharr[i].total;
     }
-    
-    //bubbleSort();
+    //Sorted by shortest job first
     selectionSort();
-    /*
-    for (int i = 1; i < size; i++)
-    {
-        for (int j = i; j < size; j++)
-        {
-            if (shortest > bacharr[j+1].total)
-            {
-                shortest = bacharr[j+1].total;
-                temp = bacharr[j].total;
-                shorti[i].total = shortest;
-                shorti[i+1].total = temp;
-                
-            } else {
-                shorti[j].total = bacharr[j].total;
-            }
-            //check[i].total = shortest;
-        }
-        //shorti[i].total = shortest;
-        temp = shortest;
-    }*/
 
     printf("\n");
     printf("\n Shortest Array");
@@ -189,6 +145,18 @@ void sjf(){
     {
         printf("\n %2d", shorti[i].total);
     }
+
+    int newStart = sjfarr[0].end;
+    for (int i = 1; i < size; i++)
+    {
+        sjfarr[i].start = newStart + shorti[i].total;
+        sjfarr[i].end = sjfarr[i].start + bacharr[i].total;
+        sjfarr[i].turnaround = sjfarr[i].end - bacharr[i].arrival;
+
+    }
+    
+
+
     
 
 
