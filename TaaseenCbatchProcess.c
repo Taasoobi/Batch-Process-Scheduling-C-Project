@@ -92,9 +92,11 @@ void bubbleSort()
 {
     int i, j;
     bool swapped;
-    for (i = 0; i < size - 1; i++) {
+    int nSize;
+    nSize = size-1;
+    for (i = 1; i < nSize - 1; i++) { //changed i = 0 -> i=1,
         swapped = false;
-        for (j = 0; j < size - i - 1; j++) {
+        for (j = 1; j < nSize - i - 1; j++) {
             if (shorti[j].total > shorti[j + 1].total) {
                 swap(&shorti[j].total, &shorti[j + 1].total);
                 swapped = true;
@@ -106,6 +108,27 @@ void bubbleSort()
         if (swapped == false)
             break;
     }
+}
+
+void selectionSort() 
+{ 
+    int i, j, min_idx; 
+    int nSize = size-1;
+
+    // One by one move boundary of 
+    // unsorted subarray 
+    for (i = 1; i < size - 1; i++) { 
+        // Find the minimum element in 
+        // unsorted array 
+        min_idx = i; 
+        for (j = i + 1; j < size; j++) 
+            if (shorti[j].total < shorti[min_idx].total) 
+                min_idx = j; 
+  
+        // Swap the found minimum element 
+        // with the first element 
+        swap(&shorti[min_idx].total, &shorti[i].total);
+    } 
 }
 
 void swap(int* xp, int* yp)
@@ -137,7 +160,8 @@ void sjf(){
         shorti[i].total = bacharr[i].total;
     }
     
-    bubbleSort();
+    //bubbleSort();
+    selectionSort();
     /*
     for (int i = 1; i < size; i++)
     {
