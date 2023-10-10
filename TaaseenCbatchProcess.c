@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <limits.h>
 
-typedef struct {
+typedef struct{
     int id;
     int arrival;
     int total_cycles;
@@ -13,9 +13,9 @@ typedef struct {
     int already_started;
     int end;
     int turnaround;
-} Batch;
+}Batch;
 
-//Batch bacharr[MAX_bacharr];
+//Global Variables and Pointers
 int size;
 Batch *bacharr;
 Batch *fifoarr;
@@ -23,16 +23,16 @@ Batch *sjfarr;
 Batch *srtarr;
 
 void params(){
-    int i;
-    
     printf("Enter total number of rocsss: ");
     scanf("%d", &size);
+
+    //allocate memory for all arrays
     bacharr = (Batch*)malloc(sizeof(Batch)*size);
     fifoarr = (Batch*)malloc(sizeof(Batch)*size);
     sjfarr = (Batch*)malloc(sizeof(Batch)*size);
     srtarr = (Batch*)malloc(sizeof(Batch)*size);
 
-    for (i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         printf("Enter process id: ");
         scanf("%d", &bacharr[i].id);
         printf("Enter arrival cycle for process %d: ", bacharr[i].id);
@@ -79,14 +79,23 @@ void params(){
         srtarr[i].already_started = 0;
         srtarr[i].end = 0;
         srtarr[i].turnaround = 0;      
-
     }
+    printf("\n");
+    printf("\n__________________________________________________");
+    printf("\nParameters");
+    printf("\n ID   Arrival  Total   Start   End     Turnaround");
+    printf("\n ------------------------------------------------\n");
+    for (int i = 0; i < size; i++)
+    {
+        printf(" %2d    %2d       %2d\n",
+        bacharr[i].id, bacharr[i].arrival,
+        bacharr[i].total_cycles);
+    }
+    printf("\n__________________________________________________");
 }
 
 void fifo(){
-    //fifoarr = (batch*)malloc(sizeof(batch)*size);
-    printf("\n FIFO: ");
-    //First in First out
+    printf("\nFIFO: ");
     fifoarr[0].start = bacharr[0].arrival;
     fifoarr[0].end = bacharr[0].total_cycles;
     fifoarr[0].turnaround = fifoarr[0].end - bacharr[0].arrival;
@@ -99,20 +108,11 @@ void fifo(){
         newStart = fifoarr[i].end;//for next iteration
         fifoarr[i].turnaround = fifoarr[i].end - bacharr[i].arrival;
     }
-    
-    printf("\n");
-    printf("\n ID   Arrival  Total   Start   End     Turnaround");
-    printf("\n ------------------------------------------------");
-
-    for (int i = 0; i < size; i++)
-    {
-        printf("\n %2d    %2d       %2d     %2d      %2d      %2d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total_cycles, fifoarr[i].start, fifoarr[i].end, fifoarr[i].turnaround);
-    }//            id     arrival   total   start   end    turna
-    printf("\n\n");
-
+    printTable(fifoarr, size);
 }
 
 void sjf(){
+    printf("\nSJF: ");
     int time = 0;
     int shortest;
     int i, j;
@@ -126,13 +126,11 @@ void sjf(){
                 }
             }
         }
-
         if (shortest == -1) {
             time++;
             i--;
             continue;
         }
-
         sjfarr[shortest].start = time;
         sjfarr[shortest].end = time + sjfarr[shortest].total_cycles;
         sjfarr[shortest].turnaround = sjfarr[shortest].end - sjfarr[shortest].arrival;
@@ -144,6 +142,7 @@ void sjf(){
 }
 
 void srt(){
+    printf("\nSRT: ");
     int time = 0;
     int shortest;
     int i;
@@ -157,12 +156,10 @@ void srt(){
                 }
             }
         }
-
         if (shortest == -1){
             time++;
             continue;
         }
-
         if (srtarr[shortest].already_started == 0){
             srtarr[shortest].start = time;
             srtarr[shortest].already_started = 1;
@@ -176,8 +173,7 @@ void srt(){
             srtarr[shortest].turnaround = srtarr[shortest].end - srtarr[shortest].arrival;
             srtarr[shortest].done = 1;
         }
-
-        if (checkAllDone(srtarr, size)){
+        if (srtCheck(srtarr, size)){
             break;
             }
     }
@@ -185,19 +181,8 @@ void srt(){
     printTable(srtarr, size);    
 }
 
-void printTable(Batch *process, int size) {
-    
-    printf("\nID Arrival Total Start End Turnaround\n");
-    printf("--------------------------------------------------\n");
-
-    for (int i = 0; i < size; i++) {
-        printf("%2d  %2d     %2d     %2d     %2d     %2d\n", process[i].id, process[i].arrival, process[i].total_cycles,
-               process[i].start, process[i].end, process[i].turnaround);
-    }
-}
-
-int checkAllDone(Batch *processes, int size) {
-    
+//checks if each index is done in SRT Algorithm, Returns 1 to end while loop in SRT function
+int srtCheck(Batch *processes, int size){
     for (int i = 0; i < size; i++) {
         if (processes[i].done == 0)
             return 0;
@@ -205,13 +190,25 @@ int checkAllDone(Batch *processes, int size) {
     return 1;
 }
 
+void printTable(Batch *process, int size) {
+    //printf("\n");
+    printf("\n ID   Arrival  Total   Start   End     Turnaround");
+    printf("\n ------------------------------------------------\n");
+    for (int i = 0; i < size; i++) {
+        printf(" %2d    %2d       %2d     %2d      %2d      %2d\n",
+        process[i].id, process[i].arrival,
+        process[i].total_cycles, process[i].start,
+        process[i].end, process[i].turnaround);
+    }
+    printf("\n__________________________________________________");
+}
+
 int main(){
     int inp;
     bool menu = true;
-
     while (menu == true)
     {
-        printf("\n Batch Scheduling");
+        printf("\n      Batch Scheduling");
         printf("\n -----------------------------");
         printf("\n 1) Enter Parameters");
         printf("\n 2) Schedule Process with FIFO Algorithm.");
@@ -220,7 +217,6 @@ int main(){
         printf("\n 5) Quit and Free Memory.");
         printf("\n Enter Selection: ");
         scanf("%d", &inp);
-
         if (inp == 1)
         {
             params();//Test Input: 1 3 1 0 6 2 1 3 3 3 2 3    Set 2: 1 3 1 0 6 2 1 3 3 3 2
@@ -236,7 +232,6 @@ int main(){
         } else {
             printf("\n Error! Enter a number 1-5");
         }
-    
     }
 
     free(bacharr);
