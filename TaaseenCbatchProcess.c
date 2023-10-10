@@ -146,21 +146,20 @@ void sjf(){
         printf("\n %2d", shorti[i].total);
     }
 
-    int newStart = sjfarr[0].end;
+    int newStart = sjfarr[0].end; // 1 3 1 0 6 2 1 3 3 3 2 3
+    sjfarr[1].start = newStart + shorti[1].total;
     for (int i = 1; i < size; i++)
     {
-        sjfarr[i].start = newStart + shorti[i].total;
+        
+        
+        if(sjfarr[i].end != sjfarr[i].start){
+            sjfarr[i].end = sjfarr[i].start + bacharr[i].total;}
+        
         sjfarr[i].end = sjfarr[i].start + bacharr[i].total;
+        sjfarr[i+1].end = sjfarr[i].start;
+        sjfarr[i].start = newStart + shorti[i].total;
         sjfarr[i].turnaround = sjfarr[i].end - bacharr[i].arrival;
-
     }
-    
-
-
-    
-
-
-
         printf("\n");
     printf("\n ID   Arrival  Total   Start   End     Turnaround");
     printf("\n ------------------------------------------------");
@@ -172,7 +171,7 @@ void sjf(){
     printf("\n\n");
 }
 
-void srt(){
+void srt1(){
     srtarr = (batch*)malloc(sizeof(batch)*size);
     //Shortest Remaining Time (Is Preemptive)
     /*    */
@@ -185,6 +184,71 @@ void srt(){
         printf("\n %2d    %2d       %2d     %2d      %2d      %2d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total, &fifoarr[i].start, &fifoarr[i].end, &fifoarr[i].turnaround);
     }//            id     arrival   total   start   end    turna
     printf("\n\n");
+}
+
+void scheduleSRT(batch processes[], int num_processes) {
+    int current_time = 0;
+    int shortest_index;
+    int i;
+
+    while (1) {
+        shortest_index = -1;
+        for (i = 0; i < num_processes; i++) {
+            if (processes[i].done == 0 && processes[i].arrival <= current_time) {
+                if (shortest_index == -1 || processes[i].total < processes[shortest_index].total) {
+                    shortest_index = i;
+                }
+            }
+        }
+
+        if (shortest_index == -1) {
+            current_time++;
+            continue;
+        }
+
+        if (processes[shortest_index].already_started == 0) {
+            processes[shortest_index].start = current_time;
+            processes[shortest_index].already_started = 1;
+        }
+
+        processes[shortest_index].total--;
+        current_time++;
+
+        if (processes[shortest_index].total == 0) {
+            processes[shortest_index].end = current_time;
+            processes[shortest_index].turnaround = processes[shortest_index].end - processes[shortest_index].arrival;
+            processes[shortest_index].done = 1;
+        }
+
+        if (checkAllDone(processes, num_processes)){
+                for (int i = 0; i < size; i++)
+    {
+        printf("\n %2d    %2d       %2d     %2d      %2d      %2d", bacharr[i].id, bacharr[i].arrival, bacharr[i].total, bacharr[i].start, bacharr[i].end, bacharr[i].turnaround);
+    }//            id     arrival   total   start   end    turna
+    printf("\n\n");
+            break;}
+    }
+}
+
+int checkAllDone(batch processes[], int num_processes) {
+    int i;
+
+    for (i = 0; i < num_processes; i++) {
+        if (processes[i].done == 0)
+            return 0;
+    }
+}
+
+void printTable(batch processes[], int num_processes) {
+    int i;
+
+    printf("\nID Arrival Total Start End Turnaround\n");
+    printf("--------------------------------------------------\n");
+
+    for (i = 0; i < num_processes; i++) {
+        printf("%d %d %d %d %d %d\n", processes[i].id, processes[i].arrival, processes[i].total,
+               processes[i].start, processes[i].end, processes[i].turnaround);
+    }
 }
 
 int main(){
@@ -212,6 +276,7 @@ int main(){
             sjf();//func 3
         } else if (inp == 4){
             //func 4
+            scheduleSRT(bacharr, size);
         } else if (inp == 5){
             printf("\n Memory Freed and Program Quitted Successfully.");
             menu = false;
