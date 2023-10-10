@@ -88,31 +88,31 @@ void fifo(){
 
 }
 
-void bubbleSort()
-{
-    int i, j;
-    bool swapped;
-    for (i = 0; i < size - 1; i++) {
-        swapped = false;
-        for (j = 0; j < size - i - 1; j++) {
-            if (shorti[j].total > shorti[j + 1].total) {
-                swap(&shorti[j].total, &shorti[j + 1].total);
-                swapped = true;
-            }
-        }
- 
-        // If no two elements were swapped by inner loop,
-        // then break
-        if (swapped == false)
-            break;
-    }
+void selectionSort() 
+{ 
+    int i, j, min_idx; 
+
+    // One by one move boundary of 
+    // unsorted subarray 
+    for (i = 1; i < size - 1; i++) { 
+        // Find the minimum element in 
+        // unsorted array 
+        min_idx = i; 
+        for (j = i + 1; j < size; j++) 
+            if (shorti[j].total < shorti[min_idx].total) 
+                min_idx = j; 
+  
+        // Swap the found minimum element 
+        // with the first element 
+        swap(&shorti[min_idx].total, &shorti[i].total);
+    } 
 }
 
-void swap(int* xp, int* yp)
+void swap(int* x, int* y)
 {
-    int temp = *xp;
-    *xp = *yp;
-    *yp = temp;
+    int temp = *x;
+    *x = *y;
+    *y = temp;
 }
 
 void sjf(){
@@ -136,28 +136,8 @@ void sjf(){
     {
         shorti[i].total = bacharr[i].total;
     }
-    
-    bubbleSort();
-    /*
-    for (int i = 1; i < size; i++)
-    {
-        for (int j = i; j < size; j++)
-        {
-            if (shortest > bacharr[j+1].total)
-            {
-                shortest = bacharr[j+1].total;
-                temp = bacharr[j].total;
-                shorti[i].total = shortest;
-                shorti[i+1].total = temp;
-                
-            } else {
-                shorti[j].total = bacharr[j].total;
-            }
-            //check[i].total = shortest;
-        }
-        //shorti[i].total = shortest;
-        temp = shortest;
-    }*/
+    //Sorted by shortest job first
+    selectionSort();
 
     printf("\n");
     printf("\n Shortest Array");
@@ -165,6 +145,18 @@ void sjf(){
     {
         printf("\n %2d", shorti[i].total);
     }
+
+    int newStart = sjfarr[0].end;
+    for (int i = 1; i < size; i++)
+    {
+        sjfarr[i].start = newStart + shorti[i].total;
+        sjfarr[i].end = sjfarr[i].start + bacharr[i].total;
+        sjfarr[i].turnaround = sjfarr[i].end - bacharr[i].arrival;
+
+    }
+    
+
+
     
 
 
