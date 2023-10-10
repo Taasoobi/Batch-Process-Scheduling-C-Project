@@ -25,7 +25,7 @@ Batch *srtarr;
 void params(){
     int i;
     
-    printf("Enter total number of processes: ");
+    printf("Enter total number of rocsss: ");
     scanf("%d", &size);
     bacharr = (Batch*)malloc(sizeof(Batch)*size);
     fifoarr = (Batch*)malloc(sizeof(Batch)*size);
@@ -140,26 +140,69 @@ void sjf(){
         sjfarr[shortest].done = 1;
     }
 
-    //printTable(sjfarr, size);
+    printTable(sjfarr, size);    
+}
+
+void srt(){
+    int time = 0;
+    int shortest;
+    int i;
+
+    while (1){
+        shortest = -1;
+        for (i = 0; i < size; i++) {
+            if (srtarr[i].done == 0 && srtarr[i].arrival <= time){
+                if (shortest == -1 || srtarr[i].total_remaining < srtarr[shortest].total_remaining) {
+                    shortest = i;
+                }
+            }
+        }
+
+        if (shortest == -1){
+            time++;
+            continue;
+        }
+
+        if (srtarr[shortest].already_started == 0){
+            srtarr[shortest].start = time;
+            srtarr[shortest].already_started = 1;
+        }
+
+        srtarr[shortest].total_remaining--;
+        time++;
+
+        if (srtarr[shortest].total_remaining == 0){
+            srtarr[shortest].end = time;
+            srtarr[shortest].turnaround = srtarr[shortest].end - srtarr[shortest].arrival;
+            srtarr[shortest].done = 1;
+        }
+
+        if (checkAllDone(srtarr, size)){
+            break;
+            }
+    }
+
+    printTable(srtarr, size);    
+}
+
+void printTable(Batch *process, int size) {
+    
     printf("\nID Arrival Total Start End Turnaround\n");
     printf("--------------------------------------------------\n");
 
     for (int i = 0; i < size; i++) {
-        printf("%2d  %2d     %2d     %2d     %2d     %2d\n", sjfarr[i].id, sjfarr[i].arrival, sjfarr[i].total_cycles,
-               sjfarr[i].start, sjfarr[i].end, sjfarr[i].turnaround);
-    }    
+        printf("%2d  %2d     %2d     %2d     %2d     %2d\n", process[i].id, process[i].arrival, process[i].total_cycles,
+               process[i].start, process[i].end, process[i].turnaround);
+    }
 }
 
-void printTable(Batch *processes, int size) {
-    int i;
-
-    printf("\nID Arrival Total Start End Turnaround\n");
-    printf("--------------------------------------------------\n");
-
-    for (i = 0; i < size; i++) {
-        printf("%2d  %2d     %2d     %2d     %2d     %2d\n", processes[i].id, processes[i].arrival, processes[i].total_cycles,
-               processes[i].start, processes[i].end, processes[i].turnaround);
+int checkAllDone(Batch *processes, int size) {
+    
+    for (int i = 0; i < size; i++) {
+        if (processes[i].done == 0)
+            return 0;
     }
+    return 1;
 }
 
 int main(){
@@ -186,8 +229,7 @@ int main(){
         } else if (inp == 3){
             sjf();//func 3
         } else if (inp == 4){
-            //func 4
-            //srt(srtarr, size);
+            srt();//func 4
         } else if (inp == 5){
             printf("\n Memory Freed and Program Quitted Successfully.");
             menu = false;
