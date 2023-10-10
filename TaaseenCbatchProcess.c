@@ -108,7 +108,7 @@ void fifo(){
         newStart = fifoarr[i].end;//for next iteration
         fifoarr[i].turnaround = fifoarr[i].end - bacharr[i].arrival;
     }
-    printTable(fifoarr, size);
+    display(fifoarr, size);
 }
 
 void sjf(){
@@ -138,7 +138,7 @@ void sjf(){
         sjfarr[shortest].done = 1;
     }
 
-    printTable(sjfarr, size);    
+    display(sjfarr, size);    
 }
 
 void srt(){
@@ -178,7 +178,7 @@ void srt(){
             }
     }
 
-    printTable(srtarr, size);    
+    display(srtarr, size);    
 }
 
 //checks if each index is done in SRT Algorithm, Returns 1 to end while loop in SRT function
@@ -190,7 +190,7 @@ int srtCheck(Batch *processes, int size){
     return 1;
 }
 
-void printTable(Batch *process, int size) {
+void display(Batch *process, int size) {
     //printf("\n");
     printf("\n ID   Arrival  Total   Start   End     Turnaround");
     printf("\n ------------------------------------------------\n");
